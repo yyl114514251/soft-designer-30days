@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>软件设计师 · 30天冲刺打卡</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230284c7'/%3E%3Cpath d='M18 20h28v6H18zM18 30h28v6H18zM18 40h18v6H18z' fill='%23E0F2FE'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0b1220;--panel:#111c30;--panel2:#152238;--line:#233453;
+  --ink:#e6edf7;--dim:#8aa0bd;--accent:#38bdf8;--accent2:#22d3ee;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;--violet:#a78bfa;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:radial-gradient(1100px 500px at 50% -8%, rgba(56,189,248,.12), transparent 60%),var(--bg);
+  color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+  min-height:100vh;padding:18px 16px 30px;
+}
+.num{font-variant-numeric:tabular-nums;}
+.wrap{max-width:1120px;margin:0 auto;}
+/* ===== header ===== */
+header{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  background:linear-gradient(120deg,var(--panel),var(--panel2));border:1px solid var(--line);
+  border-radius:16px;padding:20px 24px;
+}
+header .brand{display:flex;align-items:center;gap:14px;}
+header .logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#0ea5e9,#22d3ee);display:flex;align-items:center;justify-content:center;flex:none;}
+header h1{font-size:21px;letter-spacing:1px;}
+header .sub{color:var(--dim);font-size:13px;margin-top:3px;}
+.countdown{text-align:right;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.28);border-radius:12px;padding:10px 16px;}
+.countdown .lab{font-size:11px;color:var(--dim);letter-spacing:2px;}
+.countdown .val{font-size:26px;font-weight:800;color:var(--accent);line-height:1.2;}
+.countdown .val small{font-size:12px;font-weight:400;color:var(--dim);margin-left:2px;}
+/* ===== stats ===== */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:14px 0;}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 12px;text-align:center;}
+.stat .n{font-size:24px;font-weight:800;color:var(--accent);}
+.stat .n.g{color:var(--green);}.stat .n.o{color:var(--amber);}.stat .n.v{color:var(--violet);}
+.stat .l{font-size:12px;color:var(--dim);margin-top:4px;}
+/* ===== layout ===== */
+.main{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:14px;}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.card h2{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:12px;color:#dbeafe;}
+.card h2 .bar{width:4px;height:15px;border-radius:2px;background:linear-gradient(180deg,var(--accent),var(--accent2));}
+/* progress */
+.progress{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.progress .track{flex:1;min-width:200px;height:12px;background:#0e1a2e;border-radius:99px;overflow:hidden;}
+.progress .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:99px;transition:width .5s;}
+.progress .txt{font-size:13px;color:var(--dim);}
+/* tasks */
+.task{display:flex;align-items:center;gap:12px;padding:11px 6px;border-bottom:1px dashed var(--line);}
+.task:last-child{border-bottom:none;}
+.task .phase{flex:none;width:56px;text-align:center;font-size:11px;border-radius:6px;padding:3px 0;}
+.phase.p1{background:rgba(56,189,248,.14);color:var(--accent);}
+.phase.p2{background:rgba(167,139,250,.14);color:var(--violet);}
+.phase.p3{background:rgba(251,191,36,.14);color:var(--amber);}
+.task .body{flex:1;min-width:0;}
+.task .body .t{font-size:14px;font-weight:600;}
+.task .body .d{font-size:12px;color:var(--dim);margin-top:2px;}
+.task .body .pts{font-size:11px;color:var(--accent2);margin-top:2px;}
+.task .chk{flex:none;width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:none;color:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.2s;}
+.task .chk:hover{border-color:var(--accent);}
+.task .chk.on{background:var(--green);border-color:var(--green);color:#052e16;}
+/* memo */
+.memo{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+.memo h4{font-size:13px;color:var(--accent);margin-bottom:5px;}
+.memo p{font-size:12.5px;color:#c6d4e8;line-height:1.7;}
+/* score eval */
+.score-row{display:flex;gap:10px;align-items:center;margin-bottom:10px;}
+.score-row label{font-size:13px;color:var(--dim);width:86px;flex:none;}
+.score-row input{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 12px;font-size:14px;min-width:0;}
+.score-row .v{width:52px;text-align:center;font-size:12px;font-weight:700;flex:none;}
+.verdict{font-size:13px;border-radius:10px;padding:10px 12px;margin-top:4px;line-height:1.6;}
+.verdict.ok{background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.3);}
+.verdict.no{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.3);}
+/* wrong book */
+.wrong-add{display:flex;gap:8px;margin-bottom:10px;}
+.wrong-add input{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 12px;font-size:13px;min-width:0;}
+.btn{border:none;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;font-weight:600;background:var(--accent);color:#06283d;transition:.2s;}
+.btn:hover{filter:brightness(1.1);}
+.btn.ghost{background:var(--panel2);color:var(--dim);border:1px solid var(--line);}
+.wrong-item{display:flex;gap:8px;align-items:flex-start;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--line);color:#c6d4e8;}
+.wrong-item:last-child{border:none;}
+.wrong-item .no{color:var(--dim);flex:none;}
+.wrong-item .del{margin-left:auto;background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;flex:none;}
+.empty{color:var(--dim);font-size:13px;padding:8px 0;}
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);color:var(--dim);font-size:12px;margin:4px 4px 0 0;opacity:.55;transition:.3s;}
+.badge.on{opacity:1;border-color:rgba(56,189,248,.4);color:var(--accent);background:rgba(56,189,248,.1);}
+/* footer actions */
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.note{color:#5f7ba0;font-size:11.5px;line-height:1.8;margin-top:14px;text-align:center;}
+/* responsive */
+@media (max-width:880px){.main{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:520px){.stats{grid-template-columns:repeat(2,1fr);}header{padding:16px;}header h1{font-size:17px;}.countdown{width:100%;text-align:left;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#06283d" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h10M7 17h6"/></svg>
+      </div>
+      <div>
+        <h1>软件设计师 · 30 天冲刺打卡</h1>
+        <div class="sub">保姆级备考计划｜目标两科 ≥45 分｜晚间 2~2.5h，考研优先</div>
+      </div>
+    </div>
+    <div class="countdown">
+      <div class="lab">距考试 · 2026-10-24</div>
+      <div class="val num"><span id="cdDays">--</span><small>天</small></div>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="n num" id="stDone">0</div><div class="l">已打卡 / 30</div></div>
+    <div class="stat"><div class="n num g" id="stPct">0%</div><div class="l">总进度</div></div>
+    <div class="stat"><div class="n num o" id="stScore">0</div><div class="l">激励积分</div></div>
+    <div class="stat"><div class="n num v" id="stStreak">0</div><div class="l">连续打卡(天)</div></div>
+    <div class="stat"><div class="n num" id="stPhase">1</div><div class="l">当前阶段</div></div>
+  </div>
+
+  <div class="progress">
+    <div class="track"><div class="fill" id="pf"></div></div>
+    <div class="txt num" id="pt">进度 0%</div>
+  </div>
+
+  <div class="main">
+    <div>
+      <div class="card">
+        <h2><span class="bar"></span>30 天任务清单<span style="margin-left:auto;font-size:11px;color:var(--dim);font-weight:400;">点击圆点打卡，完成后积分自动到账</span></h2>
+        <div id="tasks"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2><span class="bar"></span>模拟考过线评估</h2>
+        <div class="score-row"><label>上午·综合知识</label><input id="scA" type="number" min="0" max="75" placeholder="75分制"><span class="v num" id="scAv">--</span></div>
+        <div class="score-row"><label>下午·案例分析</label><input id="scB" type="number" min="0" max="75" placeholder="75分制"><span class="v num" id="scBv">--</span></div>
+        <div class="verdict" id="verdict" style="display:none;"></div>
+        <div style="font-size:11.5px;color:var(--dim);margin-top:8px;">真实考试两科须同时 ≥45 分。模拟分填最近一次套题得分。</div>
+      </div>
+
+      <div class="card">
+        <h2><span class="bar"></span>考点速记卡</h2>
+        <div class="memo"><h4>DFD 数据流图 · 三大铁律</h4><p>① 父图与子图必须平衡（输入输出一致）；② 数据流只能出现在 外部实体↔加工 / 加工↔加工 / 加工↔存储；③ 外部实体与数据存储之间禁止直接数据流。</p></div>
+        <div class="memo"><h4>ER 图 · 必考结论</h4><p>1:N 联系：N 方表加入 1 方主键；M:N 联系：必须单独建一张关系表，主键为双方主键组合；判断范式先找函数依赖。</p></div>
+        <div class="memo"><h4>8 大高频设计模式</h4><p>单例、工厂、适配器、观察者、策略、装饰、组合、代理 —— 记清每个模式的意图和典型类图结构即可应对案例第 5 题。</p></div>
+        <div class="memo"><h4>知识产权 · 送分题</h4><p>软件著作权自创作完成之日自动产生（无需登记）；署名权、修改权、保护作品完整权保护期不受限制，其余财产权为作者终生 + 死后 50 年。</p></div>
+      </div>
+
+      <div class="card">
+        <h2><span class="bar"></span>错题本</h2>
+        <div class="wrong-add"><input id="wrongIn" placeholder="记录错题考点，如：PV操作信号量计算"><button class="btn" onclick="addWrong()">记录</button></div>
+        <div id="wrongList"><div class="empty">暂无错题，把踩过的坑都记下来</div></div>
+      </div>
+
+      <div class="card">
+        <h2><span class="bar"></span>成就徽章</h2>
+        <div id="badges">
+          <span class="badge">起步 5 天</span>
+          <span class="badge">案例上手 15 天</span>
+          <span class="badge">冲刺在即 25 天</span>
+          <span class="badge">全勤战神 30 天</span>
+          <span class="badge">积分 300</span>
+          <span class="badge">积分 500</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="bar"></span>数据备份</h2>
+        <div class="actions">
+          <button class="btn ghost" onclick="exportData()">导出存档 (JSON)</button>
+          <button class="btn ghost" onclick="importData()">导入存档</button>
+          <button class="btn ghost" onclick="resetAll()">重置进度</button>
+        </div>
+        <input type="file" id="impFile" accept=".json,application/json" style="display:none" onchange="onImport(event)">
+        <div style="font-size:11.5px;color:var(--dim);margin-top:8px;">打卡数据保存在浏览器本地（localStorage），换电脑可导出 JSON 后导入恢复。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    备考原则：白天全部留给考研（数学 &gt; 英语 &gt; 408），软考只占晚间 2~2.5h ｜ 下午案例必须动笔写，看懂≠会写 ｜
+    冷门偏题果断放弃，及格型考试不做满分党 ｜ 10.24 考完立刻回归考研主线。
+  </div>
+</div>
+
+<script>
+/* ================= 任务数据 ================= */
+var TASKS = [];
+(function(){
+  var a=1,b=17,c=27;
+  function t(day,title,desc,pts,ph){TASKS.push({day:day,title:title,desc:desc,pts:pts,ph:ph});}
+  /* 阶段1：Day1-16 上午选择题 */
+  t(a++,"数据结构真题训练","一套上午真题数据结构部分，错题考点入库，与 408 复用",10,1);
+  t(a++,"操作系统专项","OS 选择题：PV、死锁、页面置换，兼做 408 预习",10,1);
+  t(a++,"计算机组成原理","原反补码、Cache、存储器层次；超难流水线计算可跳过",10,1);
+  t(a++,"计算机网络","TCP/IP、子网划分，选择题刷题，错题入库",10,1);
+  t(a++,"软件工程模型","瀑布/增量/敏捷、耦合内聚、测试 V 模型（软考核心模块）",10,1);
+  t(a++,"数据库基础 + 范式","函数依赖、1/2/3NF，为下午 ER 题打地基",10,1);
+  t(a++,"UML 基础 + 用例图","用例图 include/extend、参与者识别",10,1);
+  t(a++,"8 大设计模式","背诵 8 大高频模式 + 刷对应选择题",10,1);
+  t(a++,"知识产权 + 标准化","送分记忆题，速记卡内容背熟",10,1);
+  t(a++,"上午真题套卷 ①","限时 75 分钟完整一套，订正错题",15,1);
+  t(a++,"上午真题套卷 ②","限时训练，标记薄弱模块",15,1);
+  t(a++,"上午真题套卷 ③","限时训练，复盘计组错题",15,1);
+  t(a++,"上午真题套卷 ④","限时训练，复盘软件工程错题",15,1);
+  t(a++,"上午真题套卷 ⑤","限时训练，复盘 UML 错题",15,1);
+  t(a++,"上午真题套卷 ⑥","限时训练，整套查漏补缺",15,1);
+  t(a++,"上午错题大复盘","回看 1-15 天全部错题，不再做新题",10,1);
+  /* 阶段2：Day17-26 下午案例（重中之重） */
+  t(b++,"DFD 数据流图专项","2 套真题 DFD，手写答案，牢记父图子图平衡",15,2);
+  t(b++,"DFD 巩固训练","继续 2 套 DFD，总结答题模板",15,2);
+  t(b++,"ER 图专项训练","实体/联系/主键外键/范式，真题手写",15,2);
+  t(b++,"ER 图巩固练习","M:N 联系重点练，真题套题",15,2);
+  t(b++,"UML 类图专项","聚合/组合/泛化/多重度，真题填空",15,2);
+  t(b++,"UML 真题训练","UML 大题完整练习",15,2);
+  t(b++,"C 语言算法填空","学会上下文猜空，保底拿分策略",15,2);
+  t(b++,"设计模式案例大题","场景识别模式，案例 5 答题练习",15,2);
+  t(b++,"案例混合套题 ①","完整下午卷一套，手写限时",20,2);
+  t(b++,"案例混合套题 ②","完整下午卷一套，订正错题",20,2);
+  /* 阶段3：Day27-30 全真模拟 */
+  t(c++,"全真模拟（上午+下午）","整套计时模拟考场环境",25,3);
+  t(c++,"模拟卷错题复盘","复盘整套错题，回看速记卡",15,3);
+  t(c++,"全部错题总复盘","回顾所有错题，背诵答题模板",15,3);
+  t(c++,"考前最后冲刺","看速记卡，不做新难题，调心态",10,3);
+})();
+
+/* ================= 存储 ================= */
+var KEY = 'rk_soft30_v1';
+var D = load();
+function load(){
+  try{ var s = localStorage.getItem(KEY); if(s){ var o = JSON.parse(s); return Object.assign({done:[],score:0,streak:0,wrong:[],sa:null,sb:null}, o); } }catch(e){}
+  return {done:[],score:0,streak:0,wrong:[],sa:null,sb:null};
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){} }
+
+/* ================= 渲染 ================= */
+var PHASE_NAME = {1:'上午选择题',2:'下午案例',3:'全真冲刺'};
+function phaseOf(i){ return i<16 ? 1 : (i<26 ? 2 : 3); }
+
+function render(){
+  var t = document.getElementById('tasks');
+  var h = '';
+  for(var i=0;i<TASKS.length;i++){
+    var it = TASKS[i], on = D.done.indexOf(i) > -1;
+    h += '<div class="task">'
+      + '<span class="phase p'+it.ph+'">'+PHASE_NAME[it.ph]+'</span>'
+      + '<div class="body"><div class="t">Day'+it.day+'｜'+it.title+'</div><div class="d">'+it.desc+'</div><div class="pts">+'+it.pts+' 积分</div></div>'
+      + '<button class="chk'+(on?' on':'')+'" onclick="toggle('+i+')" aria-label="打卡">'+(on?'✓':'')+'</button>'
+      + '</div>';
+  }
+  t.innerHTML = h;
+
+  var done = D.done.length, pct = Math.round(done/30*100);
+  document.getElementById('stDone').textContent = done;
+  document.getElementById('stPct').textContent = pct+'%';
+  document.getElementById('stScore').textContent = D.score;
+  document.getElementById('pf').style.width = pct+'%';
+  document.getElementById('pt').textContent = '进度 '+pct+'%（'+done+'/30）';
+
+  /* 当前阶段：取最后完成的打卡所在阶段 */
+  var ph = 1;
+  if(done){ var last = D.done[D.done.length-1]; ph = phaseOf(last); }
+  document.getElementById('stPhase').textContent = PHASE_NAME[ph];
+
+  /* 连续打卡：按 day 排序连续 */
+  var days = D.done.map(function(i){return TASKS[i].day;}).sort(function(a,b){return a-b;});
+  var streak = 0;
+  for(var k=0;k<days.length;k++){
+    if(k===0 || days[k]===days[k-1]+1) streak++; else streak=1;
+  }
+  document.getElementById('stStreak').textContent = streak;
+
+  /* 徽章 */
+  var b = document.querySelectorAll('#badges .badge');
+  var got = [done>=5, done>=15, done>=25, done>=30, D.score>=300, D.score>=500];
+  for(var z=0;z<b.length;z++){ b[z].classList.toggle('on', got[z]); }
+
+  renderWrong(); renderScore(); save();
+}
+
+function toggle(i){
+  var p = D.done.indexOf(i);
+  if(p>-1){ D.done.splice(p,1); D.score -= TASKS[i].pts; }
+  else { D.done.push(i); D.done.sort(function(a,b){return a-b;}); D.score += TASKS[i].pts; }
+  render();
+}
+
+/* ================= 错题本 ================= */
+function addWrong(){
+  var v = document.getElementById('wrongIn').value.trim();
+  if(!v) return;
+  D.wrong.push(v);
+  document.getElementById('wrongIn').value='';
+  render();
+}
+function delWrong(i){ D.wrong.splice(i,1); render(); }
+function renderWrong(){
+  var w = document.getElementById('wrongList');
+  if(!D.wrong.length){ w.innerHTML = '<div class="empty">暂无错题，把踩过的坑都记下来</div>'; return; }
+  var h='';
+  for(var i=0;i<D.wrong.length;i++){
+    h += '<div class="wrong-item"><span class="no">'+(i+1)+'.</span><span>'+esc(D.wrong[i])+'</span><button class="del" onclick="delWrong('+i+')">删除</button></div>';
+  }
+  w.innerHTML = h;
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ================= 模拟分评估 ================= */
+function renderScore(){
+  var a = document.getElementById('scA').value, b = document.getElementById('scB').value;
+  var av = a===''?null:parseFloat(a), bv = b===''?null:parseFloat(b);
+  D.sa = av; D.sb = bv;
+  document.getElementById('scAv').textContent = av===null?'--':(av>=45?'过线':'<45');
+  document.getElementById('scAv').style.color = av===null?'var(--dim)':(av>=45?'var(--green)':'var(--red)');
+  document.getElementById('scBv').textContent = bv===null?'--':(bv>=45?'过线':'<45');
+  document.getElementById('scBv').style.color = bv===null?'var(--dim)':(bv>=45?'var(--green)':'var(--red)');
+  var v = document.getElementById('verdict');
+  if(av===null && bv===null){ v.style.display='none'; return; }
+  v.style.display='block';
+  if(av!==null && av<45){ v.className='verdict no'; v.textContent='上午 '+av+' 分 < 45：选择题还需加强，回看错题本 + 高频考点。'; }
+  else if(bv!==null && bv<45){ v.className='verdict no'; v.textContent='下午 '+bv+' 分 < 45：案例是过线关键，DFD/ER/UML 套题必须手写提速。'; }
+  else if(av!==null && av>=45 && bv!==null && bv>=45){ v.className='verdict ok'; v.textContent='两科模拟均 ≥45，过线状态良好；保持真题节奏，稳定输出即可。'; }
+  else { v.className='verdict ok'; v.textContent='已填科目过线；补全另一科分数可给出综合判断。'; }
+}
+
+/* ================= 倒计时 ================= */
+function countdown(){
+  var exam = new Date('2026-10-24T08:30:00');
+  var now = new Date();
+  var d = Math.ceil((exam - now)/86400000);
+  document.getElementById('cdDays').textContent = d>0 ? d : '已开考';
+}
+
+/* ================= 备份 ================= */
+function exportData(){
+  var blob = new Blob([JSON.stringify(D,null,2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '软设冲刺存档_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 800);
+}
+function importData(){ document.getElementById('impFile').click(); }
+function onImport(e){
+  var f = e.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(){
+    try{
+      var o = JSON.parse(r.result);
+      D = Object.assign({done:[],score:0,streak:0,wrong:[],sa:null,sb:null}, o);
+      D.done = D.done||[]; D.wrong = D.wrong||[];
+      if(document.getElementById('scA')) document.getElementById('scA').value = (D.sa===null?'':D.sa);
+      if(document.getElementById('scB')) document.getElementById('scB').value = (D.sb===null?'':D.sb);
+      render();
+    }catch(err){ alert('导入失败：文件格式不正确'); }
+  };
+  r.readAsText(f);
+  e.target.value='';
+}
+function resetAll(){
+  if(!confirm('确定重置全部进度？错题与分数也会清空。')) return;
+  D = {done:[],score:0,streak:0,wrong:[],sa:null,sb:null};
+  document.getElementById('scA').value=''; document.getElementById('scB').value='';
+  render();
+}
+
+/* ================= 事件 ================= */
+document.getElementById('scA').addEventListener('input', renderScore);
+document.getElementById('scB').addEventListener('input', renderScore);
+
+countdown(); render();
+</script>
+</body>
+</html>
